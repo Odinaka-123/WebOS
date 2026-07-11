@@ -7,6 +7,7 @@ import DesktopIcon from "./DesktopIcon";
 import Window from "./Window";
 import Taskbar from "./Taskbar";
 import StartMenu from "./StartMenu";
+import BootFlicker from "./BootFlicker";
 
 export default function Desktop() {
   const { windows, openWindow } = useWindowStore();
@@ -16,7 +17,11 @@ export default function Desktop() {
     openWindow({ appId: app.id, title: app.title, ...app.defaultSize });
 
   return (
-    <div className="h-full w-full flex flex-col bg-linear-to-br from-desk-bg to-[#0b1119]">
+    <div className="h-full w-full flex flex-col bg-linear-to-br from-desk-bg to-desk-bg-2 relative">
+      <BootFlicker />
+
+      <div className="scanlines absolute inset-0 pointer-events-none" />
+
       <div className="relative flex-1 overflow-hidden">
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           {Object.values(APPS).map((app) => (

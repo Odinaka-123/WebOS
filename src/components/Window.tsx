@@ -6,6 +6,7 @@ import { APPS } from "@/apps/registry";
 
 export default function Window({ win }: { win: WinState }) {
   const {
+    windows,
     focusWindow,
     closeWindow,
     minimizeWindow,
@@ -28,6 +29,7 @@ export default function Window({ win }: { win: WinState }) {
 
   const app = APPS[win.appId];
   const Component = app?.component;
+  const isFocused = win.z === Math.max(...windows.map((w) => w.z));
 
   const onTitleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -104,45 +106,65 @@ export default function Window({ win }: { win: WinState }) {
         height: "calc(100% - 44px)",
         zIndex: win.z,
       }
-    : { left: win.x, top: win.y, width: win.w, height: win.h, zIndex: win.z };
+    : {
+        left: win.x,
+        top: win.y,
+        width: win.w,
+        height: win.h,
+        zIndex: win.z,
+        boxShadow:
+          isFocused ?
+            "var(--shadow-focus), var(--shadow-window)"
+          : "var(--shadow-window)",
+      };
 
   return (
     <div
-      className="absolute bg-desk-panel border border-desk-border rounded-lg shadow-window flex flex-col overflow-hidden"
+      className={`absolute bg-desk-panel rounded-md flex flex-col overflow-hidden border ${
+        isFocused ? "border-desk-accent-dim" : "border-desk-border"
+      }`}
       style={style}
       onMouseDown={() => focusWindow(win.id)}
     >
       <div
-        className="h-9 flex items-center justify-between px-3 bg-desk-panel-light border-b border-desk-border cursor-grab active:cursor-grabbing select-none"
+        className="h-8 flex items-center justify-between pl-3 pr-1.5 bg-desk-panel-light border-b border-desk-border cursor-grab active:cursor-grabbing select-none"
         onMouseDown={onTitleMouseDown}
         onDoubleClick={() => toggleMaximize(win.id)}
       >
-        <span className="text-sm font-display text-slate-200 truncate">
+        <span
+          className={`text-xs font-display tracking-wide truncate ${isFocused ? "text-desk-accent" : "text-desk-text-dim"}`}
+        >
           {win.title}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 font-display text-xs">
           <button
-            className="w-3 h-3 rounded-full bg-yellow-500 hover:brightness-110"
+            className="w-5 h-5 flex items-center justify-center rounded-sm border border-desk-border text-desk-text-dim hover:border-desk-accent-dim hover:text-desk-accent"
             title="Minimize"
             onClick={() => minimizeWindow(win.id)}
-          />
+          >
+            &ndash;
+          </button>
           <button
-            className="w-3 h-3 rounded-full bg-emerald-500 hover:brightness-110"
+            className="w-5 h-5 flex items-center justify-center rounded-sm border border-desk-border text-desk-text-dim hover:border-desk-accent-dim hover:text-desk-accent text-[10px]"
             title="Maximize"
             onClick={() => toggleMaximize(win.id)}
-          />
+          >
+            &#9633;
+          </button>
           <button
-            className="w-3 h-3 rounded-full bg-rose-500 hover:brightness-110"
+            className="w-5 h-5 flex items-center justify-center rounded-sm border border-desk-border text-desk-text-dim hover:border-desk-danger hover:text-desk-danger"
             title="Close"
             onClick={() => closeWindow(win.id)}
-          />
+          >
+            &times;
+          </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-auto win-scroll">
         {Component ?
           <Component />
-        : <div className="p-4 text-slate-400">Unknown app</div>}
+        : <div className="p-4 text-desk-text-dim">Unknown app</div>}
       </div>
 
       {!win.maximized && (
