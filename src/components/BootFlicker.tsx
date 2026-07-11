@@ -16,6 +16,6 @@ export default function BootFlicker() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] pointer-events-none bg-desk-text animate-[boot-flicker_650ms_ease-out_forwards]" />
+    <div className="fixed inset-0 z-60 pointer-events-none bg-desk-text animate-[boot-flicker_650ms_ease-out_forwards]" />
   );
 }

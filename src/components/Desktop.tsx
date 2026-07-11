@@ -17,12 +17,17 @@ export default function Desktop() {
     openWindow({ appId: app.id, title: app.title, ...app.defaultSize });
 
   return (
-    <div className="h-full w-full flex flex-col bg-linear-to-br from-desk-bg to-desk-bg-2 relative">
+    <div className="h-full w-full flex flex-col bg-desk-bg-2 relative overflow-hidden">
       <BootFlicker />
 
-      <div className="scanlines absolute inset-0 pointer-events-none" />
+      <div className="glow-field">
+        <div className="glow-orb glow-orb-amber" />
+        <div className="glow-orb glow-orb-blue" />
+      </div>
 
-      <div className="relative flex-1 overflow-hidden">
+      <div className="scanlines absolute inset-0 pointer-events-none z-1" />
+
+      <div className="relative z-10 flex-1 overflow-hidden">
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           {Object.values(APPS).map((app) => (
             <DesktopIcon
@@ -43,10 +48,12 @@ export default function Desktop() {
         )}
       </div>
 
-      <Taskbar
-        startOpen={startOpen}
-        onStartClick={() => setStartOpen((v) => !v)}
-      />
+      <div className="relative z-10">
+        <Taskbar
+          startOpen={startOpen}
+          onStartClick={() => setStartOpen((v) => !v)}
+        />
+      </div>
     </div>
   );
 }

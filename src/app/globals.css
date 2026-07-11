@@ -80,3 +80,54 @@ body {
     inset 0 1px 3px rgba(0, 0, 0, 0.4);
   transform: translateY(1px);
 }
+
+/* secondary cool accent, used sparingly to keep amber from feeling monochrome */
+:root {
+  --color-desk-accent-2: #5b8dae;
+}
+@theme inline {
+  --color-desk-accent-2: var(--color-desk-accent-2);
+}
+
+/* ambient glow field: two slow-orbiting blurred radial lights behind the desktop */
+.glow-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+.glow-orb-amber {
+  top: 6%;
+  left: 10%;
+  width: 44vw;
+  height: 44vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: radial-gradient(circle, rgba(232, 163, 61, 0.3), transparent 70%);
+  animation: orbit-a 55s linear infinite;
+}
+.glow-orb-blue {
+  bottom: 4%;
+  right: 8%;
+  width: 36vw;
+  height: 36vw;
+  max-width: 520px;
+  max-height: 520px;
+  background: radial-gradient(circle, rgba(91, 141, 174, 0.24), transparent 70%);
+  animation: orbit-b 70s linear infinite reverse;
+}
+@keyframes orbit-a {
+  0% { transform: rotate(0deg) translateX(5vw) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(5vw) rotate(-360deg); }
+}
+@keyframes orbit-b {
+  0% { transform: rotate(0deg) translateX(4vw) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(4vw) rotate(-360deg); }
+}

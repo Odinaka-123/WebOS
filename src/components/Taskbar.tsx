@@ -13,12 +13,19 @@ export default function Taskbar({
   startOpen: boolean;
 }) {
   const { windows, focusWindow, minimizeWindow } = useWindowStore();
-  const [now, setNow] = useState<Date>(new Date());
+  const [now, setNow] = useState<Date>(() => new Date());
 
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 1000 * 30);
+    const t = setInterval(() => setNow(new Date()), 1000 * 15);
     return () => clearInterval(t);
   }, []);
+
+  const time = now.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+  const [clock, period] = time ? [time.slice(0, -3), time.slice(-2)] : ["", ""];
 
   return (
     <div className="h-11 bg-desk-panel border-t border-desk-border flex items-center px-2 gap-2 select-none">
@@ -44,18 +51,25 @@ export default function Taskbar({
               onClick={() =>
                 win.minimized ? focusWindow(win.id) : minimizeWindow(win.id)
               }
-              className="h-8 px-3 rounded text-sm text-desk-text bg-desk-panel-light/60 hover:bg-desk-panel-light border border-desk-border flex items-center gap-2 whitespace-nowrap transition-colors"
+              className="h-8 px-3 rounded text-sm text-desk-text bg-desk-panel-light/60 hover:bg-desk-panel-light border border-desk-border flex items-center gap-2 whitespace-nowrap transition-colors font-body"
             >
-              {Icon && <Icon className="w-3.5 h-3.5" />}
+              {Icon && <Icon className="w-3.5 h-3.5 text-desk-text-dim" />}
               <span>{win.title}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="text-xs text-desk-text-dim font-display px-2 tabular-nums">
-        {now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-      </div>
+      {time && (
+        <div className="flex items-baseline gap-1 h-8 px-3 rounded border border-desk-border bg-desk-bg-2/60 font-display tabular-nums">
+          <span className="text-sm text-desk-accent animate-pulse">
+            {clock}
+          </span>
+          <span className="text-[10px] text-desk-text-dim uppercase">
+            {period}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

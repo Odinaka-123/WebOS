@@ -7,7 +7,7 @@ export default function Notepad() {
 
   return (
     <textarea
-      className="win-scroll w-full h-full resize-none bg-desk-panel text-slate-100 p-3 text-sm font-body outline-none"
+      className="win-scroll w-full h-full resize-none bg-desk-panel text-desk-text placeholder-desk-text-dim p-3 text-sm font-body outline-none"
       placeholder="Start typing..."
       value={text}
       onChange={(e) => setText(e.target.value)}
