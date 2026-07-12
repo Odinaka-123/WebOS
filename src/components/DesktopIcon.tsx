@@ -21,7 +21,7 @@ export default function DesktopIcon({
       >
         <Icon className="w-6 h-6 drop-shadow-[0_1px_1px_rgba(0,0,0,0.6)]" />
       </span>
-      <span className="px-1.5 py-0.5 rounded bg-black/60 text-[11px] leading-tight font-display font-medium tracking-wide text-white text-center">
+      <span className="px-1.5 py-0.5 rounded bg-[#000]/60 text-[11px] leading-tight font-display font-medium tracking-wide text-white text-center">
         {title}
       </span>
     </button>
